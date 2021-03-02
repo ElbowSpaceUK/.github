@@ -2,7 +2,7 @@ name: Atlas CMS Module - Basic Checks
 
 # Run on every push to the repository
 on:
-  push:
+  pull_request:
 
 jobs:
   testsuite:
@@ -24,7 +24,7 @@ jobs:
           --health-timeout=5s
           --health-retries=3
 
-    name: Basic Checks
+    name: Full Module Checks
 
     steps:
 
@@ -84,6 +84,16 @@ jobs:
           DB_PORT: 3306
           DB_USER: root
         run: vendor/bin/phpunit --testdox
+
+      - name: Check code styling
+        run: |
+          composer require --dev squizlabs/php_codesniffer
+          vendor/bin/phpcs --standard=PSR12 app
+
+      - name: Execute Static Analysis
+        run: |
+          composer require --dev nunomaduro/larastan
+          vendor/bin/phpstan analyse app -c ./vendor/nunomaduro/larastan/extension.neon  --level=4 --no-progress
 
 #      - name: Setup dusk tests
 #        run: |
