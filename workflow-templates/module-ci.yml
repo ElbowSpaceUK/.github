@@ -1,0 +1,15 @@
+name: Module CI
+on: push
+jobs:
+  trigger-build:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[no ci]')"
+
+    steps:
+    - name: Dispatch Event to CMS Repo
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.COMPOSER_AUTH }}
+        repository: ElbowSpaceUK/atlas-cms
+        event-type: trigger-build
+        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
