@@ -1,0 +1,4 @@
+{
+    "name": "Atlas CMS Modules CI trigger workflow",
+    "description": "Used to trigger a build of the Atlas CMS & FE API from modules."
+}
